@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tasks:
+    - name: echo sensu config
+      shell: echo '{
+              "client": {
+                "name": "$HOSTNAME",
+                "address": "{{ ansible_eth0.ipv4.address }}",
+                "subscriptions": [
+                  "test"
+                ]
+              }
+            }' | tee /etc/sensu/conf.d/client.json
+            echo '{
+             "rabbitmq": {
+               "port": 5672,
+               "host": "10.19.20.200",
+               "user": "sensu",
+               "password": "sensu",
+               "vhost": "/sensu",
+               "reconnect_on_error": false,
+               "prefetch": 1
+             }
+           }' | tee /etc/sensu/conf.d/rabbitmq.json
+             echo  '{
+             "transport": {
+               "name": "rabbitmq",
+               "reconnect_on_error": true
+             }
+           }' | tee /etc/sensu/conf.d/transport.json 
+    - name: start sensu
+      shell: systemctl start sensu-client
+
+
