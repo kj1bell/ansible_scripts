@@ -13,5 +13,4 @@
          regexp: "localhost"
          replace: "{{ ansible_fqdn }}"
          backup: no
-     - name: Start Sensu Client
-       shell: systemctl start sensu-client
+       
